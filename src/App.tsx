@@ -1,14 +1,9 @@
+import GestorEmpleado from "./components/GestorEmpleado";
 
 function App() {
   
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          hola
-        </div>
-      </section>
-    </>
+    <GestorEmpleado />
   )
 }
 
