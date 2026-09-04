@@ -5,9 +5,9 @@ import type { empleadoType } from "../types/Props";
 import Swal from "sweetalert2";
 
 const useFormularioEmpleado = (
+    guardarEmpleado: (e: Empleado) => void,
     empleadoEditar: empleadoType,
     setEmpleadoEditar: (e: empleadoType) => void,
-    guardarEmpleado: (e: Empleado) => void,
 ) => {
     const empleadoObj: FormularioDatos = {
         nombre: "",
@@ -26,6 +26,57 @@ const useFormularioEmpleado = (
             });
         }
     }, [empleadoEditar]);
+
+    const manejarEnvio = (e: React.ChangeEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+
+        if (!formularioDatos.nombre.trim()) {
+            Swal.fire("Nombre del empleado requerido", "", "warning");
+            return;
+        }
+
+        if (!formularioDatos.cargo.trim()) {
+            Swal.fire("Cargo del empleado requerido", "", "warning");
+            return;
+        }
+
+        if (!formularioDatos.departamento.trim()) {
+            Swal.fire("Departamento del empleado requerido", "", "warning");
+            return;
+        }
+
+        const empleado: Empleado = {
+            id: empleadoEditar ? empleadoEditar.id: "",
+            nombre: formularioDatos.nombre,
+            cargo: formularioDatos.cargo,
+            departamento: formularioDatos.departamento,
+        }
+
+        guardarEmpleado(empleado);
+        setFormularioDatos(empleadoObj);
+        setEmpleadoEditar(null);
+    };
+
+    const manejarCambio = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        e.preventDefault();
+        setFormularioDatos((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
+    const manejarCancelar = (e: React.ChangeEvent<HTMLButtonElement>): void => {
+        e.preventDefault();
+        setFormularioDatos(empleadoObj);
+        setEmpleadoEditar(null);
+    }
+
+    return {
+        formularioDatos,
+        manejarCambio,
+        manejarEnvio,
+        manejarCancelar,
+    }
 }
 
 export default useFormularioEmpleado;
